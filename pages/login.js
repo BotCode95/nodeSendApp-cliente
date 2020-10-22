@@ -16,7 +16,7 @@ const Login = () => {
             .required('El email es obligatorio'),
             password: Yup.string()
             .required('Ingrese su password')
-            .min(6, 'El password debe contener al menos 6 caracteres')
+            
         }),
         onSubmit: valores => {
             console.log(valores);
