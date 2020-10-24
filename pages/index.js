@@ -1,6 +1,8 @@
 import React, {useContext, useEffect} from 'react';
 import Layout from '../components/Layout';
+import Alerta from '../components/Alerta';
 import authContext from '../context/auth/authContext'
+import appContext from '../context/app/appContext'
 import Link from 'next/link'
 import Dropzone from '../components/Dropzone'
 
@@ -10,12 +12,17 @@ const Index = () => {
     const Authcontext = useContext(authContext);
     const {usuarioAutenticado} = Authcontext;
 
+     //extraer el usuario autenticado del storage
+     const AppContext = useContext(appContext);
+     const {mensaje_archivo} = AppContext;
+
     useEffect(() => {
         usuarioAutenticado()
     }, [])
     return ( 
         <Layout>
             <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
+            {mensaje_archivo && <Alerta/>}
                 <div className="lg:flex md:shadow-lg p-5 bg-white rounded-lg py-10">
                     
                         <Dropzone/>
