@@ -6,18 +6,18 @@ import appContext from '../context/app/appContext';
 const Dropzone = () => {
 
     const AppContext = useContext(appContext);
-    const { mostrarAlerta} = AppContext;
+    const { mostrarAlerta, subirArchivo, cargando, crearEnlace} = AppContext;
     const onDropRejected = () => {
         mostrarAlerta('No se puede subir, el limite es 1MB, obten una cuenta gratis para subir archivos más grandes');
     }
 
     const onDropAccepted = useCallback(async (acceptedFiles) => {
-        console.log(acceptedFiles);
-        //form data
+        // console.log(acceptedFiles);
+        //crear form data
         const formData = new FormData();
-        formData.append('archivo', acceptedFiles[0]);
-        const resultado = await clienteAxios.post('/api/archivos', formData)
-        console.log(resultado.data);
+        formData.append('archivo', acceptedFiles[0]); //[0] por ser siempre un solo archivo
+        
+        subirArchivo(formData, acceptedFiles[0].path);
     }, []);
 
     //extraer contenido de dropzone
@@ -34,9 +34,6 @@ const Dropzone = () => {
         </li>
     ));
 
-    const crearEnlace = () => {
-        console.log('creando el enlace');
-    } 
     return (
         <div className="md:flex-1 mb-3 mx-2 mt-16 lg:mt-0 flex flex-col items-center justify-center border-dashed border-gray-400 border-2 bg-gray-100 px-4">
             {acceptedFiles.length > 0 ? (
@@ -45,11 +42,13 @@ const Dropzone = () => {
                     <ul>
                         {archivos}
                     </ul>
-                    <button
+                    { cargando ? <p className="my-10 text-center text-gray-600">Subiendo Archivo</p> : (
+                        <button
                         type="button"
                         className="bg-blue-700 w-full py-3 rounded-lg text-white my-10 hover:bg-blue-800"
                         onClick={() => crearEnlace()}
-                    >Crear Enlace</button>
+                        >Crear Enlace</button>
+                    )}
                 </div>
             ) : (
                 <div {...getRootProps({className: 'dropzone w-full py-32'})}>
