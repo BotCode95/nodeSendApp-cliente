@@ -9,7 +9,8 @@ import {
     SUBIR_ARCHIVO_EXITO,
     SUBIR_ARCHIVO_ERROR,
     CREAR_ENLACE_EXITO,
-    CREAR_ENLACE_ERROR
+    CREAR_ENLACE_ERROR,
+    LIMPIAR_STATE
 } from '../../types';
 
 import clienteAxios from '../../config/axios'
@@ -94,8 +95,18 @@ const AppState = ({children}) => {
             })
         } catch (error) {
             console.log(error);
+            dispatch({
+                type:CREAR_ENLACE_ERROR,
+                // payload: error.response.data.msg
+            })
         }
     } 
+
+    const limpiarState = () => {
+        dispatch({
+            type: LIMPIAR_STATE,
+        })
+    }
     return (
         <appContext.Provider
             value={{
@@ -109,7 +120,8 @@ const AppState = ({children}) => {
                 url: state.url,
                 mostrarAlerta,
                 subirArchivo,
-                crearEnlace
+                crearEnlace,
+                limpiarState
             }}
         >
             {children}
