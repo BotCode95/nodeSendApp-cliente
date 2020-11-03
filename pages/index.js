@@ -4,7 +4,7 @@ import Alerta from '../components/Alerta';
 import authContext from '../context/auth/authContext'
 import appContext from '../context/app/appContext'
 import Link from 'next/link'
-import Dropzone from '../components/Dropzone'
+import Dropzone from '../components/Dropzone';
 
 const Index = () => {
 
@@ -17,8 +17,16 @@ const Index = () => {
      const {mensaje_archivo, url} = AppContext;
 
     useEffect(() => {
-        usuarioAutenticado()
+        const token = localStorage.getItem('token');
+        if(token){
+            usuarioAutenticado();
+        }
+        
     }, [])
+
+    const copiarEnlace = () => (
+        navigator.clipboard.writeText(`${process.env.frontendURL}/enlaces/${url}`)
+    )
     return ( 
         <Layout>
             <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
@@ -30,7 +38,7 @@ const Index = () => {
                     <button
                         type="button"
                         className="mt-10 bg-red-500 hover:bg-gray-900 w-full p-2 text-white uppercase font-bold"
-                        onclick={() => navigator.clipboard.writeText(`${process.env.frontendURL}/enlaces/${url}`)}
+                        onclick={copiarEnlace()}
                         >Copiar Enlace</button>
                 </>
             ) : (
